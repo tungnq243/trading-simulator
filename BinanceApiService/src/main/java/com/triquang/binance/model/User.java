@@ -1,7 +1,7 @@
 package com.triquang.binance.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.triquang.binance.domain.USER_ROLE;
+import com.triquang.binance.domain.UserRole;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -25,6 +25,6 @@ public class User {
 	
 	@Embedded
 	private TwoFactorAuth twoFactorAuth = new TwoFactorAuth();
-	private USER_ROLE role = USER_ROLE.ROLE_CUSTOMER;
+	private UserRole role = UserRole.ROLE_CUSTOMER;
 
 }

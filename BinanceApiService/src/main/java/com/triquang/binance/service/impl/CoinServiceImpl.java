@@ -83,7 +83,7 @@ public class CoinServiceImpl implements CoinService {
 			coin.setImage(jsonNode.get("image").get("large").asText());
 
 			JsonNode marketData = jsonNode.get("market_data");
-			coin.setCurrent_price(marketData.get("current_price").get("usd").asDouble());
+			coin.setCurrentPrice(marketData.get("current_price").get("usd").asDouble());
 			coin.setMarketCap(marketData.get("market_cap").get("usd").asLong());
 			coin.setMarketCapRank(marketData.get("market_cap_rank").asInt());
 			coin.setTotalVolume(marketData.get("total_volume").get("usd").asLong());
