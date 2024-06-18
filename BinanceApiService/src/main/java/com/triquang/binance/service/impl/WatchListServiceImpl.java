@@ -22,7 +22,7 @@ public class WatchListServiceImpl implements WatchListService {
 		if (watchList == null) {
 			throw new Exception("WatchList not found");
 		}
-		return null;
+		return watchList;
 	}
 
 	@Override

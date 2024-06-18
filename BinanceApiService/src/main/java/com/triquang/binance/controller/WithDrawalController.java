@@ -37,6 +37,8 @@ public class WithDrawalController {
 
 		WithDrawal drawal = drawalService.requestWithDrawal(amount, user);
 		walletService.addBalance(wallet, -drawal.getAmount());
+		
+		/* */
 
 		return new ResponseEntity<>(drawal, HttpStatus.OK);
 	}

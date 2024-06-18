@@ -24,6 +24,7 @@ import com.triquang.binance.security.JwtProvider;
 import com.triquang.binance.service.CustomUserService;
 import com.triquang.binance.service.EmailService;
 import com.triquang.binance.service.TwoFactorOTPService;
+import com.triquang.binance.service.WatchListService;
 import com.triquang.binance.utils.OtpUtils;
 
 @RestController
@@ -43,6 +44,9 @@ public class AuthController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private WatchListService watchListService;
 
 	@PostMapping("/signup")
 	public ResponseEntity<AuthResponse> register(@RequestBody User user) throws Exception {
@@ -58,8 +62,8 @@ public class AuthController {
 		newUser.setFullName(user.getFullName());
 		newUser.setMobile(user.getMobile());
 
-		var savedUser = repository.save(newUser);
-		repository.save(savedUser);
+		var savedUser = repository.save(newUser);	
+		watchListService.createWatchList(savedUser);
 
 		Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
