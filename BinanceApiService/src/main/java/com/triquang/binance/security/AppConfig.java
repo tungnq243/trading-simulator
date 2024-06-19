@@ -1,59 +1,96 @@
 package com.triquang.binance.security;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import com.triquang.binance.model.User;
+
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 public class AppConfig {
 	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	 @Bean
+	    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	                .authorizeHttpRequests(Authorize -> Authorize
+//	                		.requestMatchers("/api/admin/**").hasRole("ADMIN")
+	                                .requestMatchers("/api/**").authenticated()	                                
+	                                .anyRequest().permitAll())	                
+					.oauth2Login(oauth->{
+						oauth.loginPage("/login/google");
+						oauth.authorizationEndpoint(authorization->
+								authorization.baseUri("/login/oauth2/authorization"));
+						oauth.successHandler(new AuthenticationSuccessHandler() {
 
-	@Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.sessionManagement(m -> m.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/**").authenticated().anyRequest().permitAll())
-				.addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-				.csrf(csrf -> csrf.disable())
-				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-				.httpBasic(Customizer.withDefaults())
-				.formLogin(Customizer.withDefaults());
+							@Override
+							public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+																Authentication authentication) throws IOException, ServletException {
 
-		return http.build();
-	}
+								if(authentication.getPrincipal() instanceof DefaultOAuth2User) {
+									DefaultOAuth2User userDetails = (DefaultOAuth2User) authentication.getPrincipal();
+									String email = userDetails.getAttribute("email");
+									String fullName=userDetails.getAttribute("name");
+									String phone=userDetails.getAttribute("phone");
+									String picture=userDetails.getAttribute("picture");
+									boolean email_verified= Boolean.TRUE.equals(userDetails.getAttribute("email_verified"));
 
-	private CorsConfigurationSource corsConfigurationSource() {
-		return new CorsConfigurationSource() {
+									User user=new User();
+									user.setVerified(email_verified);
+									user.setFullName(fullName);
+									user.setEmail(email);
+									user.setMobile(phone);
+									user.setPicture(picture);
 
-			@Override
-			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-				var config = new CorsConfiguration();
-				config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-				
-				config.setAllowedMethods(Collections.singletonList("*"));
-				config.setAllowCredentials(true);
-				config.setAllowedHeaders(Collections.singletonList("*"));
-				config.setExposedHeaders(Arrays.asList("Authorization"));
-				config.setMaxAge(3600L);
-				
-				return config;
-			}
-		};
-	}
+								}
+							}
+						});
+					})
+	                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+	                .csrf(csrf -> csrf.disable())
+	                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+	               			
+			return http.build();
+			
+		}
+		
+	    private CorsConfigurationSource corsConfigurationSource() {
+	        return new CorsConfigurationSource() {
+	            @Override
+	            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+	                CorsConfiguration cfg = new CorsConfiguration();
+	                cfg.setAllowedOrigins(Arrays.asList(
+	                    "http://localhost:5173"
+	                ));
+	                cfg.setAllowedMethods(Collections.singletonList("*"));
+	                cfg.setAllowCredentials(true);
+	                cfg.setAllowedHeaders(Collections.singletonList("*"));
+	                cfg.setExposedHeaders(Arrays.asList("Authorization"));
+	                cfg.setMaxAge(3600L);
+	                return cfg;
+	            }
+	        };
+	    }
+
+	    @Bean
+	    PasswordEncoder passwordEncoder() {
+			return new BCryptPasswordEncoder();
+		}
 }

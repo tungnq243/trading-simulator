@@ -7,15 +7,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 
-@Entity
 @Data
+@Entity
 public class TwoFactorOTP {
 	@Id
 	private String id;
+
 	private String otp;
 
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@OneToOne
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private User user;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

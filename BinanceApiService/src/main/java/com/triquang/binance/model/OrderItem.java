@@ -8,23 +8,31 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class OrderItem {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 
-	private double quantity;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	@ManyToOne
-	private Coin coin;
-	private double buyPrice;
-	private double sellPrice;
+    private double quantity;
 
-	@JsonIgnore
-	@OneToOne
-	private Order order;
+    @ManyToOne
+    private Coin coin;
+
+    private double buyPrice;
+
+    private double sellPrice;
+
+    @JsonIgnore
+    @OneToOne
+    private Order order;
+
 }

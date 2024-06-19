@@ -1,5 +1,5 @@
 package com.triquang.binance.domain;
 
 public enum OrderStatus {
-	PENDING, FILED, CANCED, PARTIALLY,_FILLED, ERROR, SUCCESS
+    PENDING, FILLED, CANCELLED, PARTIALLY_FILLED, ERROR, SUCCESS
 }

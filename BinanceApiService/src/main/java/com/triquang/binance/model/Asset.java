@@ -5,20 +5,25 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data
 @Entity
-public class Asset {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Asset {  
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	private double quantity;
-	private double buyPrice;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne
-	private Coin coin;
+    private double quantity;
+    private double buyPrice;
 
-	@ManyToOne
-	private User user;
+    @ManyToOne
+    private Coin coin;
+
+    @ManyToOne
+    private User user;
 }

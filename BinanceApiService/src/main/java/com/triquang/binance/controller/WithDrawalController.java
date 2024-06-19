@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.triquang.binance.model.User;
 import com.triquang.binance.model.Wallet;
-import com.triquang.binance.model.WithDrawal;
+import com.triquang.binance.model.Withdrawal;
 import com.triquang.binance.service.UserService;
 import com.triquang.binance.service.WalletService;
 import com.triquang.binance.service.WithDrawalService;
@@ -35,7 +35,7 @@ public class WithDrawalController {
 		User user = userService.findUserProfileByJwt(jwt);
 		Wallet wallet = walletService.getUserWallet(user);
 
-		WithDrawal drawal = drawalService.requestWithDrawal(amount, user);
+		Withdrawal drawal = drawalService.requestWithDrawal(amount, user);
 		walletService.addBalance(wallet, -drawal.getAmount());
 		
 		/* */
@@ -48,7 +48,7 @@ public class WithDrawalController {
 			@RequestHeader("Authorization") String jwt) throws Exception {
 		User user = userService.findUserProfileByJwt(jwt);
 
-		WithDrawal drawal = drawalService.proceedWithDrawal(id, accept);
+		Withdrawal drawal = drawalService.proceedWithDrawal(id, accept);
 		Wallet wallet = walletService.getUserWallet(user);
 		if (!accept) {
 			walletService.addBalance(wallet, drawal.getAmount());
@@ -58,21 +58,21 @@ public class WithDrawalController {
 	}
 
 	@GetMapping("/api/withdrawal")
-	public ResponseEntity<List<WithDrawal>> getWithDrawalHistory(@RequestHeader("Authorization") String jwt)
+	public ResponseEntity<List<Withdrawal>> getWithDrawalHistory(@RequestHeader("Authorization") String jwt)
 			throws Exception {
 		User user = userService.findUserProfileByJwt(jwt);
 
-		List<WithDrawal> drawal = drawalService.getUserWithDrawalsHistory(user);
+		List<Withdrawal> drawal = drawalService.getUserWithDrawalsHistory(user);
 
 		return new ResponseEntity<>(drawal, HttpStatus.OK);
 	}
 
 	@GetMapping("/api/admin/withdrawal")
-	public ResponseEntity<List<WithDrawal>> getAllWithDrawalRequest(@RequestHeader("Authorization") String jwt)
+	public ResponseEntity<List<Withdrawal>> getAllWithDrawalRequest(@RequestHeader("Authorization") String jwt)
 			throws Exception {
 		userService.findUserProfileByJwt(jwt);
 
-		List<WithDrawal> drawal = drawalService.getAllDrawals();
+		List<Withdrawal> drawal = drawalService.getAllDrawals();
 
 		return new ResponseEntity<>(drawal, HttpStatus.OK);
 	}

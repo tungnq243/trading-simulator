@@ -1,45 +1,46 @@
 package com.triquang.binance.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.triquang.binance.domain.OrderStatus;
 import com.triquang.binance.domain.OrderType;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.Data;
-
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne
-	private User user;
+    @ManyToOne
+    private User user;
 
-	@Column(nullable = false)
-	private OrderType orderType;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderType orderType;
 
-	@Column(nullable = false)
-	private BigDecimal price;
+    @Column(nullable = false)
+    private BigDecimal price;
 
-	private LocalDateTime timestamp = LocalDateTime.now();
+    @Column(nullable = false)
+    private LocalDateTime timestamp;
 
-	@Column(nullable = false)
-	private OrderStatus status;
-	
-	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-	private OrderItem orderItem;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus status = OrderStatus.PENDING;
+
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private OrderItem orderItem;
+
 
 }

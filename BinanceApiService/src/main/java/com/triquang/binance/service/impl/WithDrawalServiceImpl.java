@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.triquang.binance.domain.WithDrawalStatus;
 import com.triquang.binance.model.User;
-import com.triquang.binance.model.WithDrawal;
+import com.triquang.binance.model.Withdrawal;
 import com.triquang.binance.repository.WithDrawalRepository;
 import com.triquang.binance.service.WithDrawalService;
 
@@ -19,8 +19,8 @@ public class WithDrawalServiceImpl implements WithDrawalService {
 	private WithDrawalRepository drawalRepository;
 
 	@Override
-	public WithDrawal requestWithDrawal(Long amount, User user) {
-		WithDrawal drawal = new WithDrawal();
+	public Withdrawal requestWithDrawal(Long amount, User user) {
+		Withdrawal drawal = new Withdrawal();
 		drawal.setAmount(amount);
 		drawal.setUser(user);
 		drawal.setStatus(WithDrawalStatus.PENDING);
@@ -28,12 +28,12 @@ public class WithDrawalServiceImpl implements WithDrawalService {
 	}
 
 	@Override
-	public WithDrawal proceedWithDrawal(Long withdrawalId, boolean accept) throws Exception {
-		Optional<WithDrawal> opt = drawalRepository.findById(withdrawalId);
+	public Withdrawal proceedWithDrawal(Long withdrawalId, boolean accept) throws Exception {
+		Optional<Withdrawal> opt = drawalRepository.findById(withdrawalId);
 		if (opt.isEmpty()) {
 			throw new Exception("WithDrawal not found");
 		}
-		WithDrawal drawal = opt.get();
+		Withdrawal drawal = opt.get();
 		drawal.setDate(LocalDateTime.now());
 		if (accept) {
 			drawal.setStatus(WithDrawalStatus.SUCCESS);
@@ -44,12 +44,12 @@ public class WithDrawalServiceImpl implements WithDrawalService {
 	}
 
 	@Override
-	public List<WithDrawal> getUserWithDrawalsHistory(User user) {
+	public List<Withdrawal> getUserWithDrawalsHistory(User user) {
 		return drawalRepository.findByUserId(user.getId());
 	}
 
 	@Override
-	public List<WithDrawal> getAllDrawals() {
+	public List<Withdrawal> getAllDrawals() {
 		return drawalRepository.findAll();
 	}
 

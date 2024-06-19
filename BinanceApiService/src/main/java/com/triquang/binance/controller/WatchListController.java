@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.triquang.binance.model.Coin;
 import com.triquang.binance.model.User;
-import com.triquang.binance.model.WatchList;
+import com.triquang.binance.model.Watchlist;
 import com.triquang.binance.service.CoinService;
 import com.triquang.binance.service.UserService;
 import com.triquang.binance.service.WatchListService;
@@ -30,24 +30,24 @@ public class WatchListController {
 	private CoinService coinService;
 
 	@GetMapping("/user")
-	public ResponseEntity<WatchList> getUserWatchList(@RequestHeader("Authorization") String jwt) throws Exception {
+	public ResponseEntity<Watchlist> getUserWatchList(@RequestHeader("Authorization") String jwt) throws Exception {
 		User user = userService.findUserProfileByJwt(jwt);
-		WatchList watchList = watchListService.findUserWatchList(user.getId());
+		Watchlist watchList = watchListService.findUserWatchList(user.getId());
 
 		return ResponseEntity.ok(watchList);
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<WatchList> createUserWatchList(@RequestHeader("Authorization") String jwt) throws Exception {
+	public ResponseEntity<Watchlist> createUserWatchList(@RequestHeader("Authorization") String jwt) throws Exception {
 		User user = userService.findUserProfileByJwt(jwt);
-		WatchList watchList = watchListService.createWatchList(user);
+		Watchlist watchList = watchListService.createWatchList(user);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(watchList);
 	}
 
 	@GetMapping("/{watchlistId}")
-	public ResponseEntity<WatchList> getWatchListById(@PathVariable Long watchlistId) throws Exception {
-		WatchList list = watchListService.findById(watchlistId);
+	public ResponseEntity<Watchlist> getWatchListById(@PathVariable Long watchlistId) throws Exception {
+		Watchlist list = watchListService.findById(watchlistId);
 		return ResponseEntity.ok(list);
 	}
 

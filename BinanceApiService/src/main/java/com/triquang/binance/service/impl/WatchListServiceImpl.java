@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.triquang.binance.model.Coin;
 import com.triquang.binance.model.User;
-import com.triquang.binance.model.WatchList;
+import com.triquang.binance.model.Watchlist;
 import com.triquang.binance.repository.WatchListRepository;
 import com.triquang.binance.service.WatchListService;
 
@@ -17,8 +17,8 @@ public class WatchListServiceImpl implements WatchListService {
 	private WatchListRepository watchListRepository;
 
 	@Override
-	public WatchList findUserWatchList(Long userId) throws Exception {
-		WatchList watchList = watchListRepository.findByUserId(userId);
+	public Watchlist findUserWatchList(Long userId) throws Exception {
+		Watchlist watchList = watchListRepository.findByUserId(userId);
 		if (watchList == null) {
 			throw new Exception("WatchList not found");
 		}
@@ -26,15 +26,15 @@ public class WatchListServiceImpl implements WatchListService {
 	}
 
 	@Override
-	public WatchList createWatchList(User user) {
-		WatchList watchList = new WatchList();
+	public Watchlist createWatchList(User user) {
+		Watchlist watchList = new Watchlist();
 		watchList.setUser(user);
 		return watchListRepository.save(watchList);
 	}
 
 	@Override
-	public WatchList findById(Long id) throws Exception {
-		Optional<WatchList> optional = watchListRepository.findById(id);
+	public Watchlist findById(Long id) throws Exception {
+		Optional<Watchlist> optional = watchListRepository.findById(id);
 		if (optional.isEmpty()) {
 			throw new Exception("WatchList not found");
 		}
@@ -43,7 +43,7 @@ public class WatchListServiceImpl implements WatchListService {
 
 	@Override
 	public Coin addItemToWatchList(Coin coin, User user) throws Exception {
-		WatchList list = findUserWatchList(user.getId());
+		Watchlist list = findUserWatchList(user.getId());
 		if (list.getCoins().contains(coin)) {
 			list.getCoins().remove(coin);
 		} else {
