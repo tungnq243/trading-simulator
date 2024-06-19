@@ -1,7 +1,5 @@
 package com.triquang.binance.service.impl;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +8,8 @@ import com.triquang.binance.model.ForgotPasswordToken;
 import com.triquang.binance.model.User;
 import com.triquang.binance.repository.ForgotPasswordRepository;
 import com.triquang.binance.service.ForgotPasswordService;
+
+import java.util.Optional;
 
 @Service
 public class ForgotPasswordServiceImpl implements ForgotPasswordService {
@@ -21,18 +21,18 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 			String sendTo) {
 		var token = new ForgotPasswordToken();
 		token.setUser(user);
-		token.setSendTo(sendTo);
-		token.setOtp(otp);
 		token.setId(id);
+		token.setOtp(otp);
 		token.setVerificationType(verificationType);
+		token.setSendTo(sendTo);
 
 		return forgotPasswordRepository.save(token);
 	}
 
 	@Override
 	public ForgotPasswordToken findById(String id) {
-		Optional<ForgotPasswordToken> optional = forgotPasswordRepository.findById(id);
-		return optional.orElse(null);
+		Optional<ForgotPasswordToken> opt = forgotPasswordRepository.findById(id);
+		return opt.orElse(null);
 	}
 
 	@Override
@@ -43,5 +43,10 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 	@Override
 	public void deleteToken(ForgotPasswordToken token) {
 		forgotPasswordRepository.delete(token);
+	}
+
+	@Override
+	public boolean verifyToken(ForgotPasswordToken token, String otp) {
+		return token.getOtp().equals(otp);
 	}
 }

@@ -16,41 +16,47 @@ import com.triquang.binance.service.WithDrawalService;
 @Service
 public class WithDrawalServiceImpl implements WithDrawalService {
 	@Autowired
-	private WithDrawalRepository drawalRepository;
+	private WithDrawalRepository withdrawalRepository;
 
 	@Override
-	public Withdrawal requestWithDrawal(Long amount, User user) {
-		Withdrawal drawal = new Withdrawal();
-		drawal.setAmount(amount);
-		drawal.setUser(user);
-		drawal.setStatus(WithDrawalStatus.PENDING);
-		return drawalRepository.save(drawal);
+	public Withdrawal requestWithdrawal(Long amount, User user) {
+		Withdrawal withdrawal = new Withdrawal();
+		withdrawal.setAmount(amount);
+		withdrawal.setStatus(WithDrawalStatus.PENDING);
+		withdrawal.setDate(LocalDateTime.now());
+		withdrawal.setUser(user);
+		return withdrawalRepository.save(withdrawal);
 	}
 
 	@Override
-	public Withdrawal proceedWithDrawal(Long withdrawalId, boolean accept) throws Exception {
-		Optional<Withdrawal> opt = drawalRepository.findById(withdrawalId);
-		if (opt.isEmpty()) {
-			throw new Exception("WithDrawal not found");
+	public Withdrawal procedWithdrawal(Long withdrawalId, boolean accept) throws Exception {
+		Optional<Withdrawal> withdrawalOptional = withdrawalRepository.findById(withdrawalId);
+
+		if (withdrawalOptional.isEmpty()) {
+			throw new Exception("withdrawal id is wrong...");
 		}
-		Withdrawal drawal = opt.get();
-		drawal.setDate(LocalDateTime.now());
+
+		Withdrawal withdrawal = withdrawalOptional.get();
+
+		withdrawal.setDate(LocalDateTime.now());
+
 		if (accept) {
-			drawal.setStatus(WithDrawalStatus.SUCCESS);
+			withdrawal.setStatus(WithDrawalStatus.SUCCESS);
 		} else {
-			drawal.setStatus(WithDrawalStatus.PENDING);
+			withdrawal.setStatus(WithDrawalStatus.DECLINE);
 		}
-		return drawalRepository.save(drawal);
+
+		return withdrawalRepository.save(withdrawal);
 	}
 
 	@Override
-	public List<Withdrawal> getUserWithDrawalsHistory(User user) {
-		return drawalRepository.findByUserId(user.getId());
+	public List<Withdrawal> getUsersWithdrawalHistory(User user) {
+		return withdrawalRepository.findByUserId(user.getId());
 	}
 
 	@Override
-	public List<Withdrawal> getAllDrawals() {
-		return drawalRepository.findAll();
+	public List<Withdrawal> getAllWithdrawalRequest() {
+		return withdrawalRepository.findAll();
 	}
 
 }

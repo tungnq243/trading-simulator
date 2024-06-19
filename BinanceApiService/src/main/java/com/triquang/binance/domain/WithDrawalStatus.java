@@ -1,5 +1,5 @@
 package com.triquang.binance.domain;
 
 public enum WithDrawalStatus {
-	PENDING, SUCCESS
+	PENDING, SUCCESS, DECLINE
 }

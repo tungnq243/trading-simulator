@@ -1,31 +1,35 @@
 package com.triquang.binance.service;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-
 @Service
 public class EmailService {
+
+	@Autowired
 	private JavaMailSender javaMailSender;
 
-	public void sendVerificationOtpEmail(String email, String otp) throws MessagingException {
-		MimeMessage message = javaMailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
+	public void sendVerificationOtpEmail(String userEmail, String otp) throws MessagingException, MailSendException {
+		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-		String subject = "Verify OTP";
-		String text = "Your verification code is " + otp;
+		String subject = "Account Verification";
+		String text = "Your account verification code is : " + otp;
+
 		helper.setSubject(subject);
-		helper.setText(text);
-		helper.setTo(email);
+		helper.setText(text, true);
+		helper.setTo(userEmail);
 
 		try {
-			javaMailSender.send(message);
-		} catch (Exception e) {
-			throw new MailSendException(e.getMessage());
+			javaMailSender.send(mimeMessage);
+		} catch (MailException e) {
+			throw new MailSendException("Failed to send email");
 		}
 	}
 }

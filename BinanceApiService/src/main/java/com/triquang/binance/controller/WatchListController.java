@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.triquang.binance.exception.UserException;
 import com.triquang.binance.model.Coin;
 import com.triquang.binance.model.User;
 import com.triquang.binance.model.Watchlist;
@@ -21,7 +23,7 @@ import com.triquang.binance.service.WatchListService;
 @RequestMapping("/api/watchlist")
 public class WatchListController {
 	@Autowired
-	private WatchListService watchListService;
+	private WatchListService watchlistService;
 
 	@Autowired
 	private UserService userService;
@@ -30,35 +32,38 @@ public class WatchListController {
 	private CoinService coinService;
 
 	@GetMapping("/user")
-	public ResponseEntity<Watchlist> getUserWatchList(@RequestHeader("Authorization") String jwt) throws Exception {
-		User user = userService.findUserProfileByJwt(jwt);
-		Watchlist watchList = watchListService.findUserWatchList(user.getId());
+	public ResponseEntity<Watchlist> getUserWatchlist(@RequestHeader("Authorization") String jwt) throws Exception {
 
-		return ResponseEntity.ok(watchList);
+		User user = userService.findUserProfileByJwt(jwt);
+		Watchlist watchlist = watchlistService.findUserWatchlist(user.getId());
+		return ResponseEntity.ok(watchlist);
+
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<Watchlist> createUserWatchList(@RequestHeader("Authorization") String jwt) throws Exception {
+	public ResponseEntity<Watchlist> createWatchlist(@RequestHeader("Authorization") String jwt) throws UserException {
 		User user = userService.findUserProfileByJwt(jwt);
-		Watchlist watchList = watchListService.createWatchList(user);
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(watchList);
+		Watchlist createdWatchlist = watchlistService.createWatchList(user);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdWatchlist);
 	}
 
 	@GetMapping("/{watchlistId}")
-	public ResponseEntity<Watchlist> getWatchListById(@PathVariable Long watchlistId) throws Exception {
-		Watchlist list = watchListService.findById(watchlistId);
-		return ResponseEntity.ok(list);
+	public ResponseEntity<Watchlist> getWatchlistById(@PathVariable Long watchlistId) throws Exception {
+
+		Watchlist watchlist = watchlistService.findById(watchlistId);
+		return ResponseEntity.ok(watchlist);
+
 	}
 
-	@PostMapping("/add/coin/{coinId}")
-	public ResponseEntity<Coin> addItemToWatchList(@RequestHeader("Authorization") String jwt,
+	@PatchMapping("/add/coin/{coinId}")
+	public ResponseEntity<Coin> addItemToWatchlist(@RequestHeader("Authorization") String jwt,
 			@PathVariable String coinId) throws Exception {
+
 		User user = userService.findUserProfileByJwt(jwt);
 		Coin coin = coinService.findById(coinId);
-		Coin addCoin = watchListService.addItemToWatchList(coin, user);
+		Coin addedCoin = watchlistService.addItemToWatchlist(coin, user);
+		return ResponseEntity.ok(addedCoin);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(addCoin);
 	}
 
 }

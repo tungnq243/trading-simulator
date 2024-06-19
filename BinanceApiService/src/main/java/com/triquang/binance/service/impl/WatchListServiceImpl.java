@@ -14,44 +14,42 @@ import com.triquang.binance.service.WatchListService;
 @Service
 public class WatchListServiceImpl implements WatchListService {
 	@Autowired
-	private WatchListRepository watchListRepository;
+	private WatchListRepository watchlistRepository;
 
 	@Override
-	public Watchlist findUserWatchList(Long userId) throws Exception {
-		Watchlist watchList = watchListRepository.findByUserId(userId);
-		if (watchList == null) {
-			throw new Exception("WatchList not found");
+	public Watchlist findUserWatchlist(Long userId) throws Exception {
+		Watchlist watchlist = watchlistRepository.findByUserId(userId);
+		if (watchlist == null) {
+			throw new Exception("watch not found");
 		}
-		return watchList;
+		return watchlist;
 	}
 
 	@Override
 	public Watchlist createWatchList(User user) {
-		Watchlist watchList = new Watchlist();
-		watchList.setUser(user);
-		return watchListRepository.save(watchList);
+		Watchlist watchlist = new Watchlist();
+		watchlist.setUser(user);
+		return watchlistRepository.save(watchlist);
 	}
 
 	@Override
 	public Watchlist findById(Long id) throws Exception {
-		Optional<Watchlist> optional = watchListRepository.findById(id);
-		if (optional.isEmpty()) {
-			throw new Exception("WatchList not found");
+		Optional<Watchlist> optionalWatchlist = watchlistRepository.findById(id);
+		if (optionalWatchlist.isEmpty()) {
+			throw new Exception("watch list not found");
 		}
-		return optional.get();
+		return optionalWatchlist.get();
 	}
 
 	@Override
-	public Coin addItemToWatchList(Coin coin, User user) throws Exception {
-		Watchlist list = findUserWatchList(user.getId());
-		if (list.getCoins().contains(coin)) {
-			list.getCoins().remove(coin);
-		} else {
-			list.getCoins().add(coin);
-		}
-		watchListRepository.save(list);
+	public Coin addItemToWatchlist(Coin coin, User user) throws Exception {
+		Watchlist watchlist = findUserWatchlist(user.getId());
 
+		if (watchlist.getCoins().contains(coin)) {
+			watchlist.getCoins().remove(coin);
+		} else
+			watchlist.getCoins().add(coin);
+		watchlistRepository.save(watchlist);
 		return coin;
 	}
-
 }

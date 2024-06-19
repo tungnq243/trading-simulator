@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class CreateOrderRequest {
-	private String coindId;
-	private double quantity;
-	private OrderType orderType;
+    private String coinId;
+    private double quantity;
+    private OrderType orderType;
 }

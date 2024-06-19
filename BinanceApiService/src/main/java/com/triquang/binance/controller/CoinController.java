@@ -1,24 +1,22 @@
 package com.triquang.binance.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.triquang.binance.model.Coin;
 import com.triquang.binance.service.CoinService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/coins")
 public class CoinController {
+
 	@Autowired
 	private CoinService coinService;
 
@@ -26,45 +24,54 @@ public class CoinController {
 	private ObjectMapper objectMapper;
 
 	@GetMapping
-	public ResponseEntity<List<Coin>> getCoins(@RequestParam(required = false, name = "page") int page)
-			throws Exception {
-		List<Coin> coinList = coinService.getCoinList(page);
-		return new ResponseEntity<>(coinList, HttpStatus.ACCEPTED);
+	ResponseEntity<List<Coin>> getCoinList(@RequestParam("page") int page) throws Exception {
+		List<Coin> coins = coinService.getCoinList(page);
+		return new ResponseEntity<>(coins, HttpStatus.OK);
 	}
 
 	@GetMapping("/{coinId}/chart")
-	public ResponseEntity<JsonNode> getMarketChart(@PathVariable String coinId, @RequestParam("days") int days)
+	ResponseEntity<JsonNode> getMarketChart(@PathVariable String coinId, @RequestParam("days") int days)
 			throws Exception {
-		String res = coinService.getMarketChart(coinId, days);
-		JsonNode jsonNode = objectMapper.readTree(res);
-		return new ResponseEntity<>(jsonNode, HttpStatus.ACCEPTED);
+		String coins = coinService.getMarketChart(coinId, days);
+		JsonNode jsonNode = objectMapper.readTree(coins);
+
+		return ResponseEntity.ok(jsonNode);
+
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<JsonNode> searchCoin(@RequestParam("q") String keyword) throws Exception {
+	ResponseEntity<JsonNode> searchCoin(@RequestParam("q") String keyword) throws JsonProcessingException {
 		String coin = coinService.searchCoin(keyword);
 		JsonNode jsonNode = objectMapper.readTree(coin);
+
 		return ResponseEntity.ok(jsonNode);
+
 	}
 
 	@GetMapping("/top50")
-	public ResponseEntity<JsonNode> getTop50CoinByMarketCapRank() throws Exception {
-		String coin = coinService.getTopCoinsByMarketCapRank();
+	ResponseEntity<JsonNode> getTop50CoinByMarketCapRank() throws JsonProcessingException {
+		String coin = coinService.getTop50CoinsByMarketCapRank();
 		JsonNode jsonNode = objectMapper.readTree(coin);
+
 		return ResponseEntity.ok(jsonNode);
+
 	}
 
-	@GetMapping("/trending")
-	public ResponseEntity<JsonNode> getTrendingCoin() throws Exception {
+	@GetMapping("/trading")
+	ResponseEntity<JsonNode> getTreadingCoin() throws JsonProcessingException {
 		String coin = coinService.getTrendingCoins();
 		JsonNode jsonNode = objectMapper.readTree(coin);
 		return ResponseEntity.ok(jsonNode);
+
 	}
 
-	@GetMapping("/details/{coidId}")
-	public ResponseEntity<JsonNode> getCoinDetails(@PathVariable String coinId) throws Exception {
+	@GetMapping("/details/{coinId}")
+	ResponseEntity<JsonNode> getCoinDetails(@PathVariable String coinId) throws JsonProcessingException {
 		String coin = coinService.getCoinDetails(coinId);
 		JsonNode jsonNode = objectMapper.readTree(coin);
+
 		return ResponseEntity.ok(jsonNode);
+
 	}
+
 }

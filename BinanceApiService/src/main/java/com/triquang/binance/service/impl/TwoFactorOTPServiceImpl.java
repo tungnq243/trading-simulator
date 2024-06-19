@@ -14,41 +14,41 @@ import com.triquang.binance.service.TwoFactorOTPService;
 @Service
 public class TwoFactorOTPServiceImpl implements TwoFactorOTPService {
 	@Autowired
-	private TwoFactorOTPRepository factorOTPRepository;
+	private TwoFactorOTPRepository twoFactorOtpRepository;
 
 	@Override
-	public TwoFactorOTP createFactorOTP(User user, String otp, String jwt) {
+	public TwoFactorOTP createTwoFactorOtp(User user, String otp, String jwt) {
 		UUID uuid = UUID.randomUUID();
 		String id = uuid.toString();
 
-		TwoFactorOTP factorOTP = new TwoFactorOTP();
-		factorOTP.setOtp(otp);
-		factorOTP.setJwt(jwt);
-		factorOTP.setId(id);
-		factorOTP.setUser(user);
+		TwoFactorOTP twoFactorOTP = new TwoFactorOTP();
+		twoFactorOTP.setId(id);
+		twoFactorOTP.setUser(user);
+		twoFactorOTP.setOtp(otp);
+		twoFactorOTP.setJwt(jwt);
+		return twoFactorOtpRepository.save(twoFactorOTP);
 
-		return factorOTPRepository.save(factorOTP);
-	}
-
-	@Override
-	public TwoFactorOTP findById(String id) {
-		Optional<TwoFactorOTP> optional = factorOTPRepository.findById(id);
-		return optional.orElse(null);
-	}
-
-	@Override
-	public boolean verifyTwoFactorOtp(TwoFactorOTP twoFactorOTP, String otp) {
-		return twoFactorOTP.getOtp().equals(otp);
-	}
-
-	@Override
-	public void deleteTwoFactorOtp(TwoFactorOTP factorOTP) {
-		factorOTPRepository.delete(factorOTP);
 	}
 
 	@Override
 	public TwoFactorOTP findByUser(Long userId) {
-		return factorOTPRepository.findByUserId(userId);
+		return twoFactorOtpRepository.findByUserId(userId);
+	}
+
+	@Override
+	public TwoFactorOTP findById(String id) {
+		Optional<TwoFactorOTP> twoFactorOtp = twoFactorOtpRepository.findById(id);
+		return twoFactorOtp.orElse(null);
+	}
+
+	@Override
+	public boolean verifyTwoFactorOtp(TwoFactorOTP twoFactorOtp, String otp) {
+		return twoFactorOtp.getOtp().equals(otp);
+	}
+
+	@Override
+	public void deleteTwoFactorOtp(TwoFactorOTP twoFactorOTP) {
+		twoFactorOtpRepository.delete(twoFactorOTP);
 	}
 
 }

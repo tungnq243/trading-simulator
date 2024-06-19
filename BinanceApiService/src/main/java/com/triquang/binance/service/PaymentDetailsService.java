@@ -4,8 +4,8 @@ import com.triquang.binance.model.PaymentDetails;
 import com.triquang.binance.model.User;
 
 public interface PaymentDetailsService {
-	public PaymentDetails addPaymentDetails(String accountNumber, String accountHodlerName, String ifsc,
+	public PaymentDetails addPaymentDetails(String accountNumber, String accountHolderName, String ifsc,
 			String bankName, User user);
 
-	public PaymentDetails getUserPaymentDetails(User user);
+	public PaymentDetails getUsersPaymentDetails(User user);
 }
