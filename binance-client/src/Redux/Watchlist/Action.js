@@ -20,10 +20,6 @@ export const getUserWatchlist = () => async (dispatch) => {
   }
 };
 
-
-
-
-
 export const addItemToWatchlist = (coinId) => async (dispatch) => {
   dispatch({ type: types.ADD_COIN_TO_WATCHLIST_REQUEST });
 

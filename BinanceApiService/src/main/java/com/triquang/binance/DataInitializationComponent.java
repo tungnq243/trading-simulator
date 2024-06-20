@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.triquang.binance.domain.USER_ROLE;
 import com.triquang.binance.model.User;
 import com.triquang.binance.repository.UserRepository;
 
@@ -31,7 +32,7 @@ public class DataInitializationComponent implements CommandLineRunner {
     }
 
     private void initializeAdminUser() {
-        String adminUsername = "triquang.15qt@gmail.com";
+        String adminUsername = "triquang.74qt@gmail.com";
 
         if (userRepository.findByEmail(adminUsername)==null) {
             User adminUser = new User();
@@ -39,6 +40,7 @@ public class DataInitializationComponent implements CommandLineRunner {
             adminUser.setPassword(passwordEncoder.encode("12345678"));
             adminUser.setFullName("Tri Quang");
             adminUser.setEmail(adminUsername);
+            adminUser.setRole(USER_ROLE.ROLE_ADMIN);
             userRepository.save(adminUser);
         }
     }
