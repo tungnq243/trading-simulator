@@ -49,10 +49,10 @@ const TreadingForm = () => {
     );
   };
 
-  useEffect(()=>{
-    dispatch(getAssetDetails({coinId:coin.coinDetails.id,jwt:localStorage.getItem("jwt")}))
+  useEffect(() => {
+    dispatch(getAssetDetails({ coinId: coin.coinDetails.id, jwt: localStorage.getItem("jwt") }))
 
-  },[])
+  }, [])
 
 
   return (
@@ -61,7 +61,7 @@ const TreadingForm = () => {
         <div className=" flex gap-4 items-center justify-between">
           <Input
             className="py-7 focus:outline-none "
-            placeholder="enter amount..."
+            placeholder="Enter amount..."
             onChange={handleOnChange}
             type="number"
           />
@@ -71,13 +71,13 @@ const TreadingForm = () => {
             </p>
           </div>
         </div>
-        {orderType == "SELL"?
+        {orderType == "SELL" ?
           (asset.assetDetails?.quantity * coin.coinDetails?.current_price <
             amount) && (
             <h1 className="text-red-800 text-center pt-4">
               Insufficient quantity to sell
             </h1>
-          ):(quantity * coin.coinDetails?.market_data.current_price.usd >
+          ) : (quantity * coin.coinDetails?.market_data.current_price.usd >
             wallet.userWallet?.balance) && (
             <h1 className="text-red-800 text-center pt-4">
               Insufficient Wallet Balance To Buy
@@ -102,11 +102,10 @@ const TreadingForm = () => {
               {coin.coinDetails?.market_data.current_price.usd}
             </p>
             <p
-              className={`${
-                coin.coinDetails?.market_data.market_cap_change_24h < 0
+              className={`${coin.coinDetails?.market_data.market_cap_change_24h < 0
                   ? "text-red-600"
                   : "text-green-600"
-              }`}
+                }`}
             >
               <span className="">
                 {coin.coinDetails?.market_data.market_cap_change_24h}
@@ -142,23 +141,22 @@ const TreadingForm = () => {
       <div className="">
         <DialogClose className="w-full">
           <Button
-          onClick={handleBuyCrypto}
-          className={`w-full py-6 ${
-            orderType == "SELL" ? "bg-red-600 text-white" : ""
-          }`}
-          disabled={
-            quantity==0 ||
-            (orderType == "SELL" && !asset.assetDetails?.quantity) ||
-            (orderType == "SELL" ?
-              (asset.assetDetails?.quantity * coin.coinDetails?.market_data.current_price.usd <
-                amount):quantity * coin.coinDetails?.market_data.current_price.usd >
+            onClick={handleBuyCrypto}
+            className={`w-full py-6 ${orderType == "SELL" ? "bg-red-600 text-white" : ""
+              }`}
+            disabled={
+              quantity == 0 ||
+              (orderType == "SELL" && !asset.assetDetails?.quantity) ||
+              (orderType == "SELL" ?
+                (asset.assetDetails?.quantity * coin.coinDetails?.market_data.current_price.usd <
+                  amount) : quantity * coin.coinDetails?.market_data.current_price.usd >
                 wallet.userWallet?.balance)
-          }
-        >
-          {orderType}
-        </Button>
+            }
+          >
+            {orderType}
+          </Button>
         </DialogClose>
-        
+
 
         <Button
           onClick={() => setOrderType(orderType == "BUY" ? "SELL" : "BUY")}

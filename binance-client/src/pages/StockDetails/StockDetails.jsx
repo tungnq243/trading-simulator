@@ -58,7 +58,7 @@ const StockDetails = () => {
   return (
     <>
       {coin.loading ? (
-        "loading..."
+        "Loading..."
       ) : (
         <div className="p-5 mt-5">
           <div className="flex justify-between">

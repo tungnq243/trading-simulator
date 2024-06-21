@@ -85,7 +85,7 @@ public class AuthController {
 		createdUser.setPostCode(user.getPostCode());
 		createdUser.setIdCard(OtpUtils.generateIdCard());
 		createdUser.setCountry(user.getCountry());
-
+		createdUser.setAddress(user.getAddress());
 		User savedUser = userRepository.save(createdUser);
 
 		watchListService.createWatchList(savedUser);

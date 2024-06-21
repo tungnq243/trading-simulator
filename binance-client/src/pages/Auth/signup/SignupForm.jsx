@@ -18,12 +18,25 @@ import SpinnerBackdrop from "@/components/custome/SpinnerBackdrop";
 
 const formSchema = z.object({
   fullName: z.string().nonempty("Full name is required"),
-  email: z.string().email("Invalid email address").optional(),
+  email: z.string().email("Please enter a valid email address").optional(),
   password: z
     .string()
     .min(8, "Password must be at least 8 characters long")
     .optional(),
+  mobile: z
+    .string()
+    .min(10, "Phone number must be at least 10 characters long")
+    .max(15, "Phone number must be at most 15 characters long")
+    .optional(),
+  address: z.string().nonempty("Address is required"),
+  postCode: z
+    .string()
+    .max(10, "Postcode must be at most 10 characters long")
+    .optional(),
+  city: z.string().nonempty("City is required"),
+  country: z.string().nonempty("Country is required"),
 });
+
 const SignupForm = () => {
   const {auth}=useSelector(store=>store)
 
@@ -35,6 +48,11 @@ const SignupForm = () => {
       email: "",
       password: "",
       fullName: "",
+      mobile: "",
+      address: "",
+      postCode:"",
+      city: "",
+      country: ""
     },
   });
   const onSubmit = (data) => {
@@ -43,8 +61,9 @@ const SignupForm = () => {
     console.log("signup form", data);
   };
   return (
-    <div className="space-y-5">
-       <h1 className="text-center text-xl">Welcome to Binance</h1>
+    
+    <div className="space-y-0">
+      <h1 className="text-center text-xl">Welcome to Binance</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -94,6 +113,91 @@ const SignupForm = () => {
                     placeholder="Enter your password" required
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+           <FormField
+            control={form.control}
+            name="mobile"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="border w-full border-gray-700 py-5 px-5"
+                    placeholder="Enter your phone" required
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+           <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="border w-full border-gray-700 py-5 px-5"
+                    placeholder="Enter your address" required
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="border w-full border-gray-700 py-5 px-5"
+                    placeholder="Enter your city" required
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="postCode"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="border w-full border-gray-700 py-5 px-5"
+                    placeholder="Enter your postcode" required
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="country"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    className="border w-full border-gray-700 py-5 px-5"
+                    placeholder="Enter your country" required
+                  />
+                </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}

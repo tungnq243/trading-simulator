@@ -66,7 +66,7 @@ const PaymentDetailsForm = () => {
                   <Input
                     {...field}
                     className="border w-full border-gray-700 py-5 px-5"
-                    placeholder="code with zosh"
+                    placeholder="Enter you name"
                   />
                 </FormControl>
 
@@ -125,7 +125,7 @@ const PaymentDetailsForm = () => {
                   <Input
                     {...field}
                     className="border w-full border-gray-700 py-5 px-5"
-                    placeholder="Confirm Account Number"
+                    placeholder="Confirm account number"
                   />
                 </FormControl>
 
