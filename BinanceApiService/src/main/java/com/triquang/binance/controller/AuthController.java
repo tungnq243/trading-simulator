@@ -81,6 +81,10 @@ public class AuthController {
 		createdUser.setFullName(fullName);
 		createdUser.setMobile(mobile);
 		createdUser.setPassword(passwordEncoder.encode(password));
+		createdUser.setCity(user.getCity());
+		createdUser.setPostCode(user.getPostCode());
+		createdUser.setIdCard(OtpUtils.generateIdCard());
+		createdUser.setCountry(user.getCountry());
 
 		User savedUser = userRepository.save(createdUser);
 

@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import { sendVerificationOtp, verifyOtp } from "@/Redux/Auth/Action";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,10 +23,6 @@ const AccountVarificationForm = ({handleSubmit}) => {
   const dispatch = useDispatch();
   const {auth}=useSelector(store=>store)
 
-  const handleOnChange = (e) => {
-    console.log(e.target.value);
-  };
-
   const handleSendOtp = (verificationType) => {
     dispatch(
       sendVerificationOtp({
@@ -47,7 +41,6 @@ const AccountVarificationForm = ({handleSubmit}) => {
           <p>{auth.user?.email}</p>
           <Dialog>
             <DialogTrigger>
-           
             <Button
               onClick={() => handleSendOtp("EMAIL")}
               >
@@ -89,12 +82,6 @@ const AccountVarificationForm = ({handleSubmit}) => {
             </DialogContent>
           </Dialog>
         </div>
-        {/* <div className="flex justify-between items-center">
-          <p className="">Mobile :</p>
-          <p>+918987667899</p>
-          
-          <Button onClick={() => handleSendOtp("MOBILE")}>Sent OTP</Button>
-        </div> */}
       </div>
     </div>
   );

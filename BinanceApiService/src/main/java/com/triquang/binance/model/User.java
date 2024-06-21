@@ -1,10 +1,17 @@
 package com.triquang.binance.model;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.triquang.binance.domain.USER_ROLE;
 import com.triquang.binance.domain.UserStatus;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +41,13 @@ public class User {
 	@Embedded
 	private TwoFactorAuth twoFactorAuth= new TwoFactorAuth();
 
-	private String picture;
+	private String address;
+	private String city;
+	private String postCode;
+	private String country;
+	private String idCard;
+	
+	private LocalDateTime createdAt = LocalDateTime.now();
 
 	private USER_ROLE role= USER_ROLE.ROLE_USER;
 

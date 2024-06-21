@@ -31,7 +31,7 @@ const Profile = () => {
       <div className="pt-10 w-full lg:w-[60%]">
         <Card>
           <CardHeader className="pb-9">
-            <CardTitle>Your Information</CardTitle>
+            <CardTitle className='text-yellow-500 text-2xl'>Your Information</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="lg:flex gap-32">
@@ -41,30 +41,30 @@ const Profile = () => {
                   <p className="text-gray-500">{auth.user?.email} </p>
                 </div>
                 <div className="flex">
-                  <p className="w-[9rem]">Full Name : </p>
+                  <p className="w-[9rem]">Name : </p>
                   <p className="text-gray-500">{auth.user.fullName} </p>
                 </div>
                 <div className="flex">
-                  <p className="w-[9rem]">Date Of Birth : </p>
-                  <p className="text-gray-500">{"25/09/2000"} </p>
+                  <p className="w-[9rem]">Mobile : </p>
+                  <p className="text-gray-500">{auth.user.mobile} </p>
                 </div>
                 <div className="flex">
                   <p className="w-[9rem]">ID Card : </p>
-                  <p className="text-gray-500">{"1234567890"} </p>
+                  <p className="text-gray-500">{auth.user.idCard} </p>
                 </div>
               </div>
               <div className="space-y-7">
                 <div className="flex">
                   <p className="w-[9rem]">Address : </p>
-                  <p className="text-gray-500">{"Ho Chi Minh"} </p>
+                  <p className="text-gray-500">{auth.user.address} </p>
                 </div>
                 <div className="flex">
                   <p className="w-[9rem]">City : </p>
-                  <p className="text-gray-500">{"Ha Noi"} </p>
+                  <p className="text-gray-500">{auth.user.city} </p>
                 </div>
                 <div className="flex">
                   <p className="w-[9rem]">Postcode : </p>
-                  <p className="text-gray-500">{345020} </p>
+                  <p className="text-gray-500">{auth.user.postCode} </p>
                 </div>
                 <div className="flex">
                   <p className="w-[9rem]">Country : </p>
@@ -74,10 +74,11 @@ const Profile = () => {
             </div>
           </CardContent>
         </Card>
-        <div className="mt-6">
-        <Card className="w-full">
+       
+        <div className="lg:flex gap-5 mt-5">
+          <Card className="w-full">
             <CardHeader className="pb-7">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3">
                 <CardTitle>2 Step Verification</CardTitle>
 
                 {auth.user.twoFactorAuth?.enabled ? (
@@ -108,23 +109,6 @@ const Profile = () => {
               </div>
             </CardContent>
           </Card>
-        </div>
-        <div className="lg:flex gap-5 mt-5">
-          <Card className="w-full">
-            <CardHeader className="pb-7">
-              <CardTitle>Change Password</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-5 ">
-              <div className="flex items-center">
-                <p className="w-[8rem]">Email :</p>
-                <p>{auth.user.email}</p>
-              </div>
-              <div className="flex items-center">
-                <p className="w-[8rem]">Password :</p>
-                <Button variant="secondary">Change Password</Button>
-              </div>
-            </CardContent>
-          </Card>
           <Card className="w-full">
             <CardHeader className="pb-7">
               <div className="flex items-center gap-3">
@@ -143,10 +127,6 @@ const Profile = () => {
               <div className="flex items-center">
                 <p className="w-[8rem]">Email :</p>
                 <p>{auth.user.email}</p>
-              </div>
-              <div className="flex items-center">
-                <p className="w-[8rem]">Mobile :</p>
-                <p>+918987667899</p>
               </div>
               <div>
                 <Dialog>

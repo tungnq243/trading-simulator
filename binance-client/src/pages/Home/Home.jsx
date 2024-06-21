@@ -277,7 +277,7 @@ const Home = () => {
                   )}
                 </div>
               ))}
-              {chatBot.loading && <p>Fetching data...</p>}
+              {chatBot.loading && <p>Loading, please wait...</p>}
             </div>
 
             <div className="h-[12%] border-t">

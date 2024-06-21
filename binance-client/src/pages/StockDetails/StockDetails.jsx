@@ -121,7 +121,7 @@ const StockDetails = () => {
                 <DialogContent className="">
                   <DialogHeader className="">
                     <DialogTitle className="px-10 pt-5 text-center">
-                      how much do you want to spend?
+                      How much do you want to spend?
                     </DialogTitle>
                   </DialogHeader>
                   <TreadingForm />

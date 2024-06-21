@@ -12,4 +12,14 @@ public class OtpUtils {
 		}
 		return builder.toString();
 	}
+	
+	public static String generateIdCard() {
+		int otpLength = 10;
+		Random random = new Random();
+		StringBuilder builder = new StringBuilder(otpLength);
+		for (int i = 0; i < otpLength; i++) {
+			builder.append(random.nextInt(10));
+		}
+		return builder.toString();
+	}
 }

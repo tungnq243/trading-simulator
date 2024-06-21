@@ -48,16 +48,20 @@ public class AppConfig {
 									DefaultOAuth2User userDetails = (DefaultOAuth2User) authentication.getPrincipal();
 									String email = userDetails.getAttribute("email");
 									String fullName=userDetails.getAttribute("name");
-									String phone=userDetails.getAttribute("phone");
-									String picture=userDetails.getAttribute("picture");
+									String mobile=userDetails.getAttribute("mobile");
+									String city=userDetails.getAttribute("city");
+									String country=userDetails.getAttribute("country");
+									String postcode=userDetails.getAttribute("postcode");
 									boolean email_verified= Boolean.TRUE.equals(userDetails.getAttribute("email_verified"));
 
 									User user=new User();
 									user.setVerified(email_verified);
 									user.setFullName(fullName);
 									user.setEmail(email);
-									user.setMobile(phone);
-									user.setPicture(picture);
+									user.setMobile(mobile);
+									user.setCity(city);
+									user.setPostCode(postcode);
+									user.setCountry(country);
 
 								}
 							}

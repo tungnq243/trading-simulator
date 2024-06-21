@@ -124,7 +124,7 @@ const StockChart = ({ coinId }) => {
   if (coin.marketChart.loading) {
     return (
       <div className="h-full w-full inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-        <div className="w-16 h-16 border-4 border-t-4 border-t-gray-200 border-gray-800 rounded-full animate-spin"></div>
+        <div className="w-16 h-16 border-4 border-t-4 border-t-gray-200 border-yellow-500 rounded-full animate-spin"></div>
       </div>
     );
   }
