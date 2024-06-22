@@ -1,16 +1,20 @@
 package com.triquang.binance.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.razorpay.Payment;
-import com.razorpay.PaymentLink;
-import com.razorpay.RazorpayClient;
-import com.razorpay.RazorpayException;
+import com.paypal.api.payments.Amount;
+import com.paypal.api.payments.Links;
+import com.paypal.api.payments.Payer;
+import com.paypal.api.payments.RedirectUrls;
+import com.paypal.api.payments.Transaction;
+import com.paypal.base.rest.APIContext;
+import com.paypal.base.rest.PayPalRESTException;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
@@ -31,147 +35,128 @@ public class PaymentServiceImpl implements PaymentService {
 	@Value("${stripe.api.key}")
 	private String stripeKey;
 
-	@Value("${razorpay.api.key}")
-	private String razorpayKey;
+	@Value("${paypal.client.id}")
+	private String paypalClientId;
 
-	@Value("${razorpay.api.secret}")
-	private String razorpaySecret;
+	@Value("${paypal.client.secret}")
+	private String paypalClientSecret;
+
+	@Value("${paypal.mode}")
+	private String paypalMode;
 
 	@Override
-    public PaymentOrder createOrder(User user, Long amount, PaymentMethod paymentMethod) {
-        PaymentOrder order=new PaymentOrder();
-        order.setUser(user);
-        order.setAmount(amount);
-        order.setPaymentMethod(paymentMethod);
-        return paymentOrderRepository.save(order);
-    }
+	public PaymentOrder createOrder(User user, Long amount, PaymentMethod paymentMethod) {
+		PaymentOrder order = new PaymentOrder();
+		order.setUser(user);
+		order.setAmount(amount);
+		order.setPaymentMethod(paymentMethod);
+		return paymentOrderRepository.save(order);
+	}
 
-    @Override
-    public PaymentOrder getPaymentOrderById(Long id) throws Exception {
-        Optional<PaymentOrder> optionalPaymentOrder=paymentOrderRepository.findById(id);
-        if(optionalPaymentOrder.isEmpty()){
-            throw new Exception("payment order not found with id "+id);
-        }
-        return optionalPaymentOrder.get();
-    }
+	@Override
+	public PaymentOrder getPaymentOrderById(Long id) throws Exception {
+		Optional<PaymentOrder> optionalPaymentOrder = paymentOrderRepository.findById(id);
+		if (optionalPaymentOrder.isEmpty()) {
+			throw new Exception("payment order not found with id " + id);
+		}
+		return optionalPaymentOrder.get();
+	}
 
-    @Override
-    public Boolean ProccedPaymentOrder(PaymentOrder paymentOrder,String paymentId) throws RazorpayException {
-        if(paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)){
+	@Override
+	public Boolean proccedPaymentOrder(PaymentOrder paymentOrder, String paymentId) throws PayPalRESTException {
+		if (paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)) {
+			
+			paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
+			paymentOrderRepository.save(paymentOrder);
 
-            if(paymentOrder.getPaymentMethod().equals(PaymentMethod.RAZORPAY)){
-                RazorpayClient razorpay = new RazorpayClient(razorpayKey, razorpaySecret);
-                Payment payment = razorpay.payments.fetch(paymentId);
+			return true;
+		}
 
-                Integer amount = payment.get("amount");
-                String status = payment.get("status");
-                if(status.equals("captured")){
-                    paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
+		return false;
+	}
 
-                    return true;
-                }
-                paymentOrder.setStatus(PaymentOrderStatus.FAILED);
-                paymentOrderRepository.save(paymentOrder);
-                return false;
-            }
-            paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
-            paymentOrderRepository.save(paymentOrder);
-            paymentOrderRepository.save(paymentOrder);
-            return true;
-        }
+	@Override
+	public PaymentResponse createStripePaymentLink(User user, Long amount, Long orderId) throws StripeException {
+		Stripe.apiKey = stripeKey;
 
-        return false;
-    }
+		SessionCreateParams params = SessionCreateParams.builder()
+				.addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+				.setMode(SessionCreateParams.Mode.PAYMENT)
+				.setSuccessUrl("http://localhost:5173/wallet?order_id=" + orderId)
+				.setCancelUrl(
+						"http://localhost:5173/payment/cancel")
+				.addLineItem(
+						SessionCreateParams.LineItem.builder().setQuantity(1L)
+								.setPriceData(
+										SessionCreateParams.LineItem.PriceData.builder().setCurrency("usd")
+												.setUnitAmount(amount * 100)
+												.setProductData(SessionCreateParams.LineItem.PriceData.ProductData
+														.builder().setName("Top up wallet").build())
+												.build())
+								.build())
+				.build();
 
-    @Override
-    public PaymentResponse createRazorpayPaymentLink(User user,
-                                                     Long Amount,
-                                                     Long orderId)
-            throws RazorpayException {
+		Session session = Session.create(params);
 
-        Long amount = Amount * 100;
+		System.out.println("session _____ " + session);
 
+		PaymentResponse res = new PaymentResponse();
+		res.setPayment_url(session.getUrl());
 
-        try {
-            // Instantiate a Razorpay client with your key ID and secret
-            RazorpayClient razorpay = new RazorpayClient(razorpayKey, razorpaySecret);
+		return res;
+	}
 
-            JSONObject paymentLinkRequest = new JSONObject();
-            paymentLinkRequest.put("amount",amount);
-            paymentLinkRequest.put("currency","INR");
+	@Override
+	public PaymentResponse createPayPalPaymentLink(User user, Long amount, Long orderId) throws PayPalRESTException {
+		APIContext apiContext = new APIContext(paypalClientId, paypalClientSecret, paypalMode);
 
+		// Create amount details
+		Amount paymentAmount = new Amount();
+		paymentAmount.setCurrency("USD"); // Change to the appropriate currency
+		paymentAmount.setTotal(String.format("%.2f", amount / 100.0));
 
-            // Create a JSON object with the customer details
-            JSONObject customer = new JSONObject();
-            customer.put("name",user.getFullName());
+		// Create transaction details
+		Transaction transaction = new Transaction();
+		transaction.setDescription("Payment for Order ID: " + orderId);
+		transaction.setAmount(paymentAmount);
 
-            customer.put("email",user.getEmail());
-            paymentLinkRequest.put("customer",customer);
+		List<Transaction> transactions = new ArrayList<>();
+		transactions.add(transaction);
 
-            // Create a JSON object with the notification settings
-            JSONObject notify = new JSONObject();
-            notify.put("email",true);
-            paymentLinkRequest.put("notify",notify);
+		// Create payer details
+		Payer payer = new Payer();
+		payer.setPaymentMethod("paypal");
 
-            // Set the reminder settings
-            paymentLinkRequest.put("reminder_enable",true);
+		// Create redirect URLs
+		RedirectUrls redirectUrls = new RedirectUrls();
+		redirectUrls.setCancelUrl("http://localhost:5173/wallet/cancel");
+		redirectUrls.setReturnUrl("http://localhost:5173/wallet/" + orderId);
 
-            // Set the callback URL and method
-            paymentLinkRequest.put("callback_url","http://localhost:5173/wallet/"+orderId);
-            paymentLinkRequest.put("callback_method","get");
+		// Create payment details
+		com.paypal.api.payments.Payment payment = new com.paypal.api.payments.Payment();
+		payment.setIntent("sale");
+		payment.setPayer(payer);
+		payment.setTransactions(transactions);
+		payment.setRedirectUrls(redirectUrls);
 
-            // Create the payment link using the paymentLink.create() method
-            PaymentLink payment = razorpay.paymentLink.create(paymentLinkRequest);
+		// Create the payment
+		com.paypal.api.payments.Payment createdPayment = payment.create(apiContext);
 
-            String paymentLinkId = payment.get("id");
-            String paymentLinkUrl = payment.get("short_url");
+		// Extract approval URL
+		String approvalUrl = null;
+		for (Links link : createdPayment.getLinks()) {
+			if ("approval_url".equals(link.getRel())) {
+				approvalUrl = link.getHref();
+				break;
+			}
+		}
 
-            PaymentResponse res=new PaymentResponse();
-            res.setPayment_url(paymentLinkUrl);
+		// Create and return payment response
+		PaymentResponse res = new PaymentResponse();
+		res.setPayment_url(approvalUrl);
 
+		return res;
 
-            return res;
-
-        } catch (RazorpayException e) {
-
-            System.out.println("Error creating payment link: " + e.getMessage());
-            throw new RazorpayException(e.getMessage());
-        }
-    }
-
-    @Override
-    public PaymentResponse createStripePaymentLink(User user, Long amount,Long orderId) throws StripeException {
-        Stripe.apiKey = stripeKey;
-
-        SessionCreateParams params = SessionCreateParams.builder()
-                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
-                .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:5173/wallet?order_id="+orderId)
-                .setCancelUrl("http://localhost:5173/payment/cancel")
-                .addLineItem(SessionCreateParams.LineItem.builder()
-                        .setQuantity(1L)
-                        .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
-                                .setCurrency("usd")
-                                .setUnitAmount(amount*100)
-                                .setProductData(SessionCreateParams
-                                        .LineItem
-                                        .PriceData
-                                        .ProductData
-                                        .builder()
-                                        .setName("Top up wallet")
-                                        .build()
-                                ).build()
-                        ).build()
-                ).build();
-
-        Session session = Session.create(params);
-
-        System.out.println("session _____ " + session);
-
-        PaymentResponse res = new PaymentResponse();
-        res.setPayment_url(session.getUrl());
-
-        return res;
-    }
+	}
 
 }

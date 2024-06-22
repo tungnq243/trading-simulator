@@ -3,14 +3,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const invoices = [
@@ -354,8 +351,6 @@ export function AssetTable({ coins, category }) {
                 {item.market_cap_change_percentage_24h}%
               </TableCell>
               <TableCell className="text-right">${item.current_price}</TableCell>
-
-              {/* market_cap_change_percentage_24h */}
             </TableRow>
           ))}
         </TableBody>

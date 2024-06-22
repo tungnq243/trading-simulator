@@ -17,11 +17,15 @@ import {
   SEARCH_COIN_REQUEST,
   FETCH_TOP_50_COINS_REQUEST,
   FETCH_TOP_50_COINS_FAILURE,
+  FETCH_TRADING_COINS_REQUEST,
+  FETCH_TRADING_COINS_SUCCESS,
+  FETCH_TRADING_COINS_FAILURE,
 } from "./ActionTypes";
 
 const initialState = {
   coinList: [],
   top50: [],
+  trading: [],
   searchCoinList: [],
   marketChart: { data: [], loading: false },
   coinById: null,
@@ -37,6 +41,7 @@ const coinReducer = (state = initialState, action) => {
     case FETCH_COIN_DETAILS_REQUEST:
     case SEARCH_COIN_REQUEST:
     case FETCH_TOP_50_COINS_REQUEST:
+    case FETCH_TRADING_COINS_REQUEST:
       return { ...state, loading: true, error: null };
 
     case FETCH_MARKET_CHART_REQUEST:
@@ -61,6 +66,15 @@ const coinReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
+
+      case FETCH_TRADING_COINS_SUCCESS:
+        return {
+          ...state,
+          trading: action.payload,
+          loading: false,
+          error: null,
+        };
+
     case FETCH_MARKET_CHART_SUCCESS:
       return {
         ...state,
@@ -100,6 +114,7 @@ const coinReducer = (state = initialState, action) => {
     case FETCH_COIN_BY_ID_FAILURE:
     case FETCH_COIN_DETAILS_FAILURE:
     case FETCH_TOP_50_COINS_FAILURE:
+    case FETCH_TRADING_COINS_FAILURE:
       return { ...state, loading: false, error: action.payload };
     default:
       return state;

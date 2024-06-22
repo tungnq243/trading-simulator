@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const TopupForm = () => {
   const [amount, setAmount] = useState();
-  const [paymentMethod, setPaymentMethod] = useState("RAZORPAY");
+  const [paymentMethod, setPaymentMethod] = useState("PAYPAL");
   const { wallet } = useSelector((store) => store);
   const dispatch = useDispatch();
 
@@ -47,20 +47,20 @@ const TopupForm = () => {
             setPaymentMethod(value);
           }}
           className="flex"
-          defaultValue="RAZORPAY"
+          defaultValue="PAYPAL"
         >
           <div className="flex items-center space-x-2 border p-3 px-5 rounded-md">
             <RadioGroupItem
               icon={DotFilledIcon}
               iconClassName="h-8 w-8"
               className="h-9 w-9"
-              value="RAZORPAY"
+              value="PAYPAL"
               id="r1"
             />
             <Label htmlFor="r1">
               <div className="bg-white rounded-md px-5 py-2 w-32">
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Razorpay_logo.svg/1200px-Razorpay_logo.svg.png"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/2560px-PayPal.svg.png"
                   alt=""
                 />
               </div>
@@ -84,6 +84,7 @@ const TopupForm = () => {
               </div>
             </Label>
           </div>
+          
         </RadioGroup>
       </div>
       {wallet.loading ? (

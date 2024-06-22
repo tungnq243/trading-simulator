@@ -1,5 +1,7 @@
 package com.triquang.binance.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.paypal.base.rest.PayPalRESTException;
 import com.razorpay.RazorpayException;
 import com.stripe.exception.StripeException;
 import com.triquang.binance.domain.PaymentMethod;
@@ -29,7 +32,7 @@ public class PaymentController {
 	@PostMapping("/api/payment/{paymentMethod}/amount/{amount}")
 	public ResponseEntity<PaymentResponse> paymentHandler(@PathVariable PaymentMethod paymentMethod,
 			@PathVariable Long amount, @RequestHeader("Authorization") String jwt)
-			throws UserException, RazorpayException, StripeException {
+			throws UserException, RazorpayException, StripeException, PayPalRESTException, IOException {
 
 		User user = userService.findUserProfileByJwt(jwt);
 
@@ -37,8 +40,8 @@ public class PaymentController {
 
 		PaymentOrder order = paymentService.createOrder(user, amount, paymentMethod);
 
-		if (paymentMethod.equals(PaymentMethod.RAZORPAY)) {
-			paymentResponse = paymentService.createRazorpayPaymentLink(user, amount, order.getId());
+		if (paymentMethod.equals(PaymentMethod.PAYPAL)) {
+			paymentResponse = paymentService.createPayPalPaymentLink(user, amount, order.getId());
 		} else {
 			paymentResponse = paymentService.createStripePaymentLink(user, amount, order.getId());
 		}

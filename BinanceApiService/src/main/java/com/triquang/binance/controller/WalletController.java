@@ -85,7 +85,7 @@ public class WalletController {
 		Wallet wallet = walleteService.getUserWallet(user);
 
 		PaymentOrder order = paymentService.getPaymentOrderById(orderId);
-		Boolean status = paymentService.ProccedPaymentOrder(order, paymentId);
+		Boolean status = paymentService.proccedPaymentOrder(order, paymentId);
 		PaymentResponse res = new PaymentResponse();
 		res.setPayment_url("deposite success");
 
