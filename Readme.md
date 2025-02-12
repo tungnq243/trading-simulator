@@ -45,6 +45,9 @@ Clone repo
 git clone https://github.com/tungnq243/trading-simulator.git
 cd trading-simulator
 
+Cấu hình postgreSQL
+cấu hình user và password trong application.properties
+
 
 Chạy Backend (Ưu tiên IntelliJ)
 cd BinanceApiService
