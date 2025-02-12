@@ -139,7 +139,7 @@ const Home = () => {
                     onClick={() => handlePageChange(page - 1)}
                   >
                     <ChevronLeftIcon className="h-4 w-4 mr-1" />
-                    Previous
+                    Trước
                   </Button>
                 </PaginationItem>
                 <PaginationItem>

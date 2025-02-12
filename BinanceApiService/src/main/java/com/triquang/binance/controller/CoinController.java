@@ -23,6 +23,9 @@ public class CoinController {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+
+
+
 	@GetMapping
 	ResponseEntity<List<Coin>> getCoinList(@RequestParam("page") int page) throws Exception {
 		List<Coin> coins = coinService.getCoinList(page);

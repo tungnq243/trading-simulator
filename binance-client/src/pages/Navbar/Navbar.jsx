@@ -52,7 +52,7 @@ const Navbar = () => {
                       <AvatarImage src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Binance_Logo.svg/768px-Binance_Logo.svg.png" />
                     </Avatar>
                     <div>
-                      <span className="font-bold text-yellow-500">BINANCE</span>
+                      <span className="font-bold text-yellow-500">GIẢ LẬP BINANCE</span>
                     </div>
                   </div>
                 </SheetTitle>
@@ -65,7 +65,7 @@ const Navbar = () => {
             onClick={() => navigate("/")}
             className="text-sm lg:text-base cursor-pointer font-bold text-yellow-500"
           >
-            BINANCE
+            GIẢ LẬP BINANCE
           </p>
           <div className="p-0 ml-9">
             <Button
@@ -75,7 +75,7 @@ const Navbar = () => {
             >
               {" "}
               <MagnifyingGlassIcon className="left-2 top-3 " />
-              <span>Search</span>
+              <span>Tìm Kiếm</span>
             </Button>
           </div>
         </div>

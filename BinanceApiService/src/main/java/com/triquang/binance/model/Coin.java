@@ -98,5 +98,10 @@ public class Coin {
 
     @JsonProperty("last_updated")
     private Date lastUpdated;
+
+    public double getPriceVnd() {
+        return this.currentPrice * 25000;  // Tính giá trị VND từ USD (giả sử tỷ giá là 25000 VND/USD)
+    }
+
 }
 

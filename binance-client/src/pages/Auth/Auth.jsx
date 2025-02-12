@@ -36,7 +36,7 @@ const Auth = () => {
         className={`bgBlure absolute top-1/2 left-1/2 transform -translate-x-1/2  -translate-y-1/2 box flex flex-col justify-center items-center  h-[35rem] w-[30rem]  rounded-md z-50 bg-black bg-opacity-50 shadow-2xl shadow-white`}
       >
         <CustomeToast show={auth.error} message={auth.error?.error} />
-        <h1 className="text-5xl font-bold pb-9 text-yellow-500">BINANCE</h1>
+        <h1 className="text-5xl font-bold pb-9 text-yellow-500"> GIẢ LẬP BINANCE</h1>
         {location.pathname == "/signup" ? (
           <section
             className={`w-full login  ${animate ? "slide-down" : "slide-up"}`}
@@ -51,7 +51,7 @@ const Auth = () => {
                     onClick={() => handleNavigation("/signin")}
                     variant="ghost" className='font-bold'
                   >
-                    Log in
+                    Đăng Nhập
                   </Button>
                 </div>
               ) : (
@@ -61,7 +61,7 @@ const Auth = () => {
                     onClick={() => handleNavigation("/signup")}
                     variant="ghost" className='font-bold'
                   >
-                    Sign up
+                    Đăng Ký
                   </Button>
                 </div>
               )}
@@ -85,7 +85,7 @@ const Auth = () => {
                   <LoginForm />
 
                   <div className="flex items-center justify-center">
-                    <span>Don't have an account?</span>
+                    <span>Bạn chưa có tài khoản?</span>
                     <Button
                       onClick={() => handleNavigation("/signup")}
                       variant="ghost" className='font-bold text-yellow-500'
@@ -99,7 +99,7 @@ const Auth = () => {
                       variant="outline"
                       className="w-full py-5"
                     >
-                      <b className="font-bold text-yellow-500">Forgot Password</b>
+                      <b className="font-bold text-yellow-500">Quên mật khẩu?</b>
                     </Button>
                   </div>
                 </div>

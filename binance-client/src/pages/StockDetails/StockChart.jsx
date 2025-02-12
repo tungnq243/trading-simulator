@@ -10,37 +10,37 @@ const timeSeries = [
   {
     keyword: "DIGITAL_CURRENCY_DAILY",
     key: "Time Series (Daily)",
-    lable: "1 Day",
+    lable: "1 Ngày",
     value: 1,
   },
   {
     keyword: "DIGITAL_CURRENCY_WEEKLY",
     key: "Weekly Time Series",
-    lable: "1 Week",
+    lable: "1 Tuần",
     value: 7,
   },
   {
     keyword: "DIGITAL_CURRENCY_MONTHLY",
     key: "Monthly Time Series",
-    lable: "1 Month",
+    lable: "1 Tháng",
     value: 30,
   },
   {
     keyword: "DIGITAL_CURRENCY_MONTHLY_3",
     key: "3 Month Time Series",
-    lable: "3 Month",
+    lable: "3 Tháng",
     value: 90,
   },
   {
     keyword: "DIGITAL_CURRENCY_MONTHLY_6",
     key: "6 Month Time Series",
-    lable: "6 Month",
+    lable: "6 Tháng",
     value: 180,
   },
   {
     keyword: "DIGITAL_CURRENCY_YEARLY",
     key: "Yearly Time Series",
-    lable: "1 year",
+    lable: "1 Năm",
     value: 365,
   },
 ];

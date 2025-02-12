@@ -45,8 +45,8 @@ const Watchlist = () => {
               <TableHead>VOLUME</TableHead>
               <TableHead>MARKET CAP</TableHead>
               <TableHead>24H</TableHead>
-              <TableHead className="">PRICE</TableHead>
-              <TableHead className="text-right text-red-700">Remove</TableHead>
+              <TableHead className="">GIÁ</TableHead>
+              <TableHead className="text-right text-red-700">XÓA</TableHead>
             </TableRow>
           </TableHeader>
 

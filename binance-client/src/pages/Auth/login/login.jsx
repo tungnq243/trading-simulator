@@ -17,8 +17,8 @@ import SpinnerBackdrop from "@/components/custome/SpinnerBackdrop";
 import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(8, "Your password must be at least 8 characters long"),
+  email: z.string().email("Vui lòng nhập email của bạn"),
+  password: z.string().min(8, "Mật khẩu của bạn phải ít nhất 8 ký tự"),
 });
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const LoginForm = () => {
   };
   return (
     <div className="space-y-5">
-      <h1 className="text-center text-2xl">Log in to your Binance account</h1>
+      <h1 className="text-center text-2xl">Đăng nhập vào tài khoản Binance của bạn</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

@@ -33,6 +33,7 @@ public class CoinServiceImpl implements CoinService {
 	@Value("${coingecko.api.key}")
 	private String API_KEY;
 
+
 	@Override
 	public List<Coin> getCoinList(int page) throws Exception {
 		String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10&page=" + page;
@@ -49,6 +50,10 @@ public class CoinServiceImpl implements CoinService {
 			System.out.println(response.getBody());
 			List<Coin> coins = objectMapper.readValue(response.getBody(), new TypeReference<List<Coin>>() {
 			});
+
+			for (Coin coin : coins) {
+				coin.getPriceVnd();  // Tính giá trị VND
+			}
 
 			return coins;
 

@@ -76,11 +76,11 @@ const Portfolio = () => {
             <TableHeader className="py-9">
               <TableRow className="sticky top-0 left-0 right-0 bg-background ">
                 <TableHead className="py-3">Coin</TableHead>
-                <TableHead>Coin Price</TableHead>
-                <TableHead>Unit</TableHead>
-                <TableHead>24h Volume</TableHead>
-                <TableHead>Change 24h</TableHead>
-                <TableHead className="text-right">Market Cap</TableHead>
+                <TableHead>Giá Coin</TableHead>
+                <TableHead>Số Lượng</TableHead>
+                <TableHead>Khối lượng giao dịch 24h</TableHead>
+                <TableHead>24H</TableHead>
+                <TableHead className="text-right">Vốn hóa</TableHead>
               </TableRow>
             </TableHeader>
 
