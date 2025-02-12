@@ -39,18 +39,23 @@ Trading Platform là một ứng dụng giúp theo dõi giá tiền điện tử
 - **API:** CoinGecko
 
 ## ⚡ Cài đặt & Chạy dự án 
-
-### **Clone repo**  
+ 
 ```bash
+Clone repo
 git clone https://github.com/tungnq243/trading-simulator.git
 cd trading-simulator
 
+
+Chạy Backend (Ưu tiên IntelliJ)
 cd BinanceApiService
 mvn spring-boot:run
 
+Chạy Frontend
 cd Trading-Platform/binance-client
 npm install
 npm run dev
+
+Mở http://localhost:5173/
 
 
 
