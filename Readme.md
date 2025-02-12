@@ -40,17 +40,17 @@ Trading Platform là một ứng dụng giúp theo dõi giá tiền điện tử
 
 ## ⚡ Cài đặt & Chạy dự án 
 
-### **1️⃣ Clone repo **  
+### **Clone repo**  
 ```bash
 git clone https://github.com/tungnq243/trading-simulator.git
 cd trading-simulator
 
-### **2️⃣ bash
-cd Trading-Platform\binance-client
+cd BinanceApiService
+mvn spring-boot:run
+
+cd Trading-Platform/binance-client
 npm install
 npm run dev
-
- Mở http://localhost:5173/
 
 
 
